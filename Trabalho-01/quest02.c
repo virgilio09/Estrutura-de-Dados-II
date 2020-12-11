@@ -4,25 +4,18 @@
 
 
 typedef struct arvAVL{
-
 	int info;
 	int altura;
 	struct arvAVL *esq, *dir;
-
 }No;
 
-
 No *aloca_arv(int valor){
-
     No *nova;
-    
     nova = (No*)malloc(sizeof(No));
-    
     nova->info = valor;
     nova->altura = 0;
     nova->esq = NULL;
     nova->dir = NULL;
-
     return nova;
 }
 
@@ -248,20 +241,27 @@ int main(){
 
     // printf("\nTempo de execusão em nanosegundos: %ld\n", (tf-ti)*1000000);
 
-	p = aloca_arv(200);
-	insereAVL(&raiz, p);
+	// p = aloca_arv(400);
+	// insereAVL(&raiz, p);
 
-	p = aloca_arv(100);
-	insereAVL(&raiz, p);
+	// p = aloca_arv(200);
+	// insereAVL(&raiz, p);
 
-	p = aloca_arv(300);
-	insereAVL(&raiz, p);
+	// p = aloca_arv(100);
+	// insereAVL(&raiz, p);
 
-	p = aloca_arv(150);
-	insereAVL(&raiz, p);
+	// p = aloca_arv(600);
+	// insereAVL(&raiz, p);
 
-	p = aloca_arv(120);
-	insereAVL(&raiz, p);
+
+	// p = aloca_arv(300);
+	// insereAVL(&raiz, p);
+
+	// p = aloca_arv(250);
+	// insereAVL(&raiz, p);
+
+	// p = aloca_arv(120);
+	// insereAVL(&raiz, p);
 		
 				
 	inordem(raiz);
