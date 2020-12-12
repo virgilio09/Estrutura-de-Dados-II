@@ -53,6 +53,7 @@ void insere_arv(No **raiz, No *a){
     }        
 }
 
+
 void imprime_lst(Lista* l){
 	
 	Lista* p;
@@ -63,6 +64,7 @@ void imprime_lst(Lista* l){
 	}
 }
 
+// em ordem 
 void imprime_arv(No *raiz){
 	if(raiz != NULL){
 		imprime_arv(raiz->esq);
@@ -70,6 +72,27 @@ void imprime_arv(No *raiz){
 		printf("%s\n",raiz->palavra);
 		imprime_arv(raiz->dir);
 	}
+}
+
+int buscarArvBB(No *raiz, char *elem, int i){ 
+    int encontrei = 0;
+
+    if(raiz != NULL){
+        if(strcmp(elem, raiz->palavra) < 0){
+            printf("Passo %d: %s\n",i, raiz->palavra);
+	        encontrei = buscarArvBB(raiz->esq, elem, i+1);
+        }else if(strcmp(elem, raiz->palavra) > 0){
+            printf("Passo %d: %s\n",i, raiz->palavra);
+		    encontrei = buscarArvBB(raiz->dir, elem, i+1);
+        }else{
+            encontrei = 1;
+            printf("Palavra encontrada na linha: ");
+            imprime_lst(raiz->linha);
+          	printf("\n");
+        }
+   }
+	
+    return(encontrei);	
 }
 
 
@@ -118,8 +141,8 @@ int main(){
 
 	add_arquivo_arv(&raiz);
 	imprime_arv(raiz);
-
-	
+	char nome[10] = "teste";
+	buscarArvBB(raiz, nome, 0);	
 
 	return 0;
 }

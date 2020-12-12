@@ -78,16 +78,16 @@ void inordem(No *a){
 }
 
 // bucar por um elemento na arvore, e mostra o caminho percorrido
-int buscarArvBB(No *raiz, int elem){ 
+int buscarArvBB(No *raiz, int elem, int i){ 
     int encontrei = 0;
 
     if(raiz != NULL){
         if(elem < raiz->info){
-            printf("%d\n",raiz->info);
-	        encontrei = buscarArvBB(raiz->esq, elem);
+            printf("Passo %d: %d\n",i, raiz->info);
+	        encontrei = buscarArvBB(raiz->esq, elem, i+1);
         }else if(elem > raiz->info){
-            printf("%d\n",raiz->info);
-		    encontrei = buscarArvBB(raiz->dir, elem);
+             printf("Passo %d: %d\n",i, raiz->info);
+		    encontrei = buscarArvBB(raiz->dir, elem, i+1);
         }else{
             encontrei = 1;
         }
@@ -95,7 +95,6 @@ int buscarArvBB(No *raiz, int elem){
 	
     return(encontrei);	
 }
-
 
 //  busca por elementos destintos na arvores 
 void bucar_elementos(No *raiz, int qtd_buscas){
@@ -107,7 +106,7 @@ void bucar_elementos(No *raiz, int qtd_buscas){
 
             int valor = rand()%100;
             printf("Caminho percorrido para encontrar %d\n",valor);
-            achou = buscarArvBB(raiz,valor);
+            achou = buscarArvBB(raiz,valor, 0);
 
             if(achou)
                 printf("Elemento encontrado\n");
@@ -151,7 +150,7 @@ int main(){
     criar_arvore(&raiz, 50);
 
     ti = clock();
-    bucar_elementos(raiz, 1);
+    bucar_elementos(raiz, 2);
     tf = clock();
 
     printf("\nTempo de execusão em nanosegundos: %ld\n", (tf-ti)*1000000);
