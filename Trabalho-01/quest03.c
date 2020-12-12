@@ -33,9 +33,7 @@ No *aloca_arv(char *palavra){
     nova->dir = NULL;
 
     return nova;
-
 }
-
 
 void insere_arv(No **raiz, No *a){
 
@@ -48,11 +46,8 @@ void insere_arv(No **raiz, No *a){
 
         else if(strcmp(a->palavra, (*raiz)->palavra) > 0)
             insere_arv(&(*raiz)->dir, a);
-    } 
-       
+    }        
 }
-
-
 
 void imprime_arv(No *raiz){
 	if(raiz != NULL){
@@ -73,9 +68,40 @@ void imprime_lst(Lista* l){
 	}
 }
 
+
+// quebra a linha em palvras e adicionas na avores 
+void add_str(No **raiz, int linha){
+
+}
+
+// Leitura do arquivo
+void ler_arquivo(){
+	FILE *arq;
+  	char linha[100];
+  	char *result;
+  	int i = 1;
+
+  	arq = fopen("texto.txt", "rt");
+  	if (arq == NULL){
+    	printf("Problemas na abertura do arquivo\n");
+     	return;
+  	}
+  	
+  	while (!feof(arq)){
+      	result = fgets(linha, 100, arq); 
+      	if (result){
+	 		printf("linha %d : %s",i,linha);
+      		i++;
+      	}
+  	}
+  	fclose(arq);
+
+}
+
 int main(){
 	No *raiz, *a;
 	raiz = NULL;
+
 	
 	a = aloca_arv("joaoo");
 	insere_arv(&raiz, a);
@@ -85,8 +111,7 @@ int main(){
 
 	imprime_arv(raiz);
 
-
-
+	ler_arquivo(); 
 
 	return 0;
 }
