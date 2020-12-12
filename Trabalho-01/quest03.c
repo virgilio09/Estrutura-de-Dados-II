@@ -70,14 +70,23 @@ void imprime_lst(Lista* l){
 
 
 // quebra a linha em palvras e adicionas na avores 
-void add_str(No **raiz, int linha){
+void add_str(No **raiz, char *linha){
 
+	No *a;
+	char *sub;
+	sub = strtok(linha, " ,.");
+
+	while(sub != NULL){
+		a = aloca_arv(sub);
+		insere_arv(&(*raiz), a);
+		sub = strtok(NULL," ,.");
+	}
 }
 
 // Leitura do arquivo
-void ler_arquivo(){
+void add_arquivo_arv(No **raiz){
 	FILE *arq;
-  	char linha[100];
+  	char linha[250];
   	char *result;
   	int i = 1;
 
@@ -88,9 +97,10 @@ void ler_arquivo(){
   	}
   	
   	while (!feof(arq)){
-      	result = fgets(linha, 100, arq); 
+      	result = fgets(linha, 250, arq); 
       	if (result){
-	 		printf("linha %d : %s",i,linha);
+      		linha[strcspn(linha, "\n")] = 0; //remove o /n
+      		add_str(&(*raiz), linha);
       		i++;
       	}
   	}
@@ -99,19 +109,12 @@ void ler_arquivo(){
 }
 
 int main(){
-	No *raiz, *a;
+	No *raiz;
 	raiz = NULL;
 
-	
-	a = aloca_arv("joaoo");
-	insere_arv(&raiz, a);
 
-	a = aloca_arv("Ana");
-	insere_arv(&raiz, a);
-
+	add_arquivo_arv(&raiz);
 	imprime_arv(raiz);
-
-	ler_arquivo(); 
 
 	return 0;
 }
