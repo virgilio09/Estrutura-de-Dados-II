@@ -13,22 +13,23 @@ typedef struct arv{
 	struct arv *esq, *dir;
 }No;
 
-Lista *insere_lst(Lista *l, int i){
+void insere_lst(Lista **l, int i){
 	Lista* novo = (Lista*) malloc(sizeof(Lista));
 	novo->info = i;
-	novo->prox = l;
-	return novo;
+	novo->prox = *l;
+	
+	*l = novo;
 }
 
 
-No *aloca_arv(char *palavra){
+No *aloca_arv(char *palavra, int id_linha){
 
     No *nova;
 
     nova = (No*)malloc(sizeof(No));
 
     strncpy(nova->palavra, palavra, strlen(palavra));    
-    nova->linha = NULL;
+    insere_lst(&nova->linha, id_linha);
     nova->esq = NULL;
     nova->dir = NULL;
 
@@ -46,15 +47,10 @@ void insere_arv(No **raiz, No *a){
 
         else if(strcmp(a->palavra, (*raiz)->palavra) > 0)
             insere_arv(&(*raiz)->dir, a);
-    }        
-}
 
-void imprime_arv(No *raiz){
-	if(raiz != NULL){
-		imprime_arv(raiz->esq);
-		printf("%s\n",raiz->palavra);
-		imprime_arv(raiz->dir);
-	}
+        else
+        	insere_lst(&(*raiz)->linha, a->linha->info);
+    }        
 }
 
 void imprime_lst(Lista* l){
@@ -62,22 +58,31 @@ void imprime_lst(Lista* l){
 	Lista* p;
 	p = l;
 	if(p != NULL){
-		printf("info = %d\n", p->info);
+		printf("%d, ", p->info);
 		imprime_lst(p->prox);
+	}
+}
 
+void imprime_arv(No *raiz){
+	if(raiz != NULL){
+		imprime_arv(raiz->esq);
+		imprime_lst(raiz->linha);
+		printf("%s\n",raiz->palavra);
+		imprime_arv(raiz->dir);
 	}
 }
 
 
 // quebra a linha em palvras e adicionas na avores 
-void add_str(No **raiz, char *linha){
+void add_str(No **raiz, char *linha, int id_linha){
 
 	No *a;
 	char *sub;
+	linha[strcspn(linha, "\n")] = 0; //remove o "/n" do final da linha
 	sub = strtok(linha, " ,.");
 
 	while(sub != NULL){
-		a = aloca_arv(sub);
+		a = aloca_arv(sub, id_linha);
 		insere_arv(&(*raiz), a);
 		sub = strtok(NULL," ,.");
 	}
@@ -99,8 +104,7 @@ void add_arquivo_arv(No **raiz){
   	while (!feof(arq)){
       	result = fgets(linha, 250, arq); 
       	if (result){
-      		linha[strcspn(linha, "\n")] = 0; //remove o /n
-      		add_str(&(*raiz), linha);
+      		add_str(&(*raiz), linha, i);
       		i++;
       	}
   	}
@@ -112,9 +116,10 @@ int main(){
 	No *raiz;
 	raiz = NULL;
 
-
 	add_arquivo_arv(&raiz);
 	imprime_arv(raiz);
+
+	
 
 	return 0;
 }
