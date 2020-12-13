@@ -136,6 +136,20 @@ void add_arquivo_arv(No **raiz){
 
 }
 
+int teset_altura(No *raiz){
+
+  if(raiz == NULL)
+    return -1;
+
+  int he = teset_altura(raiz->esq);
+  int hd = teset_altura(raiz->dir);
+
+  if(he > hd)
+    return he + 1;
+  else
+    return hd + 1;
+}
+
 int main(){
 	No *raiz;
 	raiz = NULL;
@@ -144,6 +158,8 @@ int main(){
 	imprime_arv(raiz);
 	char nome[10] = "certo";
 	buscarArvBB(raiz, nome, 0);	
+
+  printf("altura %d\n",teset_altura(raiz));
 
 	return 0;
 }
