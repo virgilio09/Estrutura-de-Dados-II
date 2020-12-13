@@ -154,6 +154,4 @@ int main(){
     tf = clock();
 
     printf("\nTempo de execusão em nanosegundos: %ld\n", (tf-ti)*1000000);
-
-
 }

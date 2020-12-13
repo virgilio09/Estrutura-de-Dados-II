@@ -79,16 +79,17 @@ int buscarArvBB(No *raiz, char *elem, int i){
 
     if(raiz != NULL){
         if(strcmp(elem, raiz->palavra) < 0){
-            printf("Passo %d: %s\n",i, raiz->palavra);
+            // printf("Passo %d: %s\n",i, raiz->palavra);
 	        encontrei = buscarArvBB(raiz->esq, elem, i+1);
         }else if(strcmp(elem, raiz->palavra) > 0){
-            printf("Passo %d: %s\n",i, raiz->palavra);
+            // printf("Passo %d: %s\n",i, raiz->palavra);
 		    encontrei = buscarArvBB(raiz->dir, elem, i+1);
         }else{
             encontrei = 1;
             printf("Palavra encontrada na linha: ");
             imprime_lst(raiz->linha);
-          	printf("\n");
+            printf("\nNumero de passos: %d\n", i);
+         
         }
    }
 	
@@ -141,7 +142,7 @@ int main(){
 
 	add_arquivo_arv(&raiz);
 	imprime_arv(raiz);
-	char nome[10] = "teste";
+	char nome[10] = "certo";
 	buscarArvBB(raiz, nome, 0);	
 
 	return 0;
