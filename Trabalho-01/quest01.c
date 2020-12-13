@@ -2,13 +2,11 @@
 #include<stdlib.h>
 #include<time.h>
 
-typedef struct arvAVL{
-
+typedef struct arvBB{
     int info;
     int altura;
-    struct arvAVL *esq, *dir;
-    
-        
+    struct arvBB *esq, *dir;
+            
 }No;
 
 No *aloca_arv(int valor){
@@ -25,7 +23,6 @@ No *aloca_arv(int valor){
     return nova;
 
 }
-
 
 // calcula a altura da arvore 
 int altura(No *raiz){

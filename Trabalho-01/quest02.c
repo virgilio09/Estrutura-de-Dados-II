@@ -75,8 +75,8 @@ void rotacaoEsq(No **raiz){
 
 
 void rotacaoDirEsq(No **raiz){ 
-  rotacaoDir(&(*raiz)->dir);
-  rotacaoEsq(raiz);
+  	rotacaoDir(&(*raiz)->dir);
+  	rotacaoEsq(raiz);
 }
 
 void rotacaoEsqDir(No **raiz){ 
@@ -131,25 +131,25 @@ int insereAVL(No **raiz, No *p){
 }
 
 
-void inordem(No *a){
+void imprime(No *a){
     if(a != NULL){
         printf(" %d = %d\n", a->info, a->altura);
-        inordem(a->esq);
-        inordem(a->dir);
+        imprime(a->esq);
+        imprime(a->dir);
     }
 }
 
 // bucar por um elemento na arvore, e mostra o caminho percorrido
-int buscarArvBB(No *raiz, int elem, int i){ 
+int buscarArv(No *raiz, int elem, int i){ 
     int encontrei = 0;
 
     if(raiz != NULL){
         if(elem < raiz->info){
             printf("Passo %d: %d\n",i, raiz->info);
-	        encontrei = buscarArvBB(raiz->esq, elem, i+1);
+	        encontrei = buscarArv(raiz->esq, elem, i+1);
         }else if(elem > raiz->info){
             printf("Passo %d: %d\n",i, raiz->info);
-		    encontrei = buscarArvBB(raiz->dir, elem, i+1);
+		    encontrei = buscarArv(raiz->dir, elem, i+1);
         }else{
             encontrei = 1;
         }
@@ -168,7 +168,7 @@ void bucar_elementos(No *raiz, int qtd_buscas){
 
             int valor = rand()%100;
             printf("Caminho percorrido para encontrar %d\n",valor);
-            achou = buscarArvBB(raiz, valor , 0);
+            achou = buscarArv(raiz, valor , 0);
 
             if(achou)
                 printf("Elemento encontrado\n");
@@ -264,10 +264,6 @@ int main(){
 	// insereAVL(&raiz, p);
 		
 				
-
-
-
-
 
 	return 0;
 }
