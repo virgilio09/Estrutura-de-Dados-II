@@ -13,14 +13,40 @@ typedef struct arv{
 	struct arv *esq, *dir;
 }No;
 
-void insere_lst(Lista **l, int i){
-	Lista* novo = (Lista*) malloc(sizeof(Lista));
-	novo->info = i;
-	novo->prox = *l;
-	
-	*l = novo;
+int busca_lista(Lista *l, int x){
+
+    int achou = 0;
+
+    if(l != NULL){
+
+        if(l->info == x)
+            achou = 1;
+
+        else  
+           achou = busca_lista(l->prox, x);
+
+    }
+
+    return achou;
 }
 
+void insere_lst(Lista **l, int i){
+    
+    int insere = busca_lista(*l, i); 
+    
+    if(insere)
+        return;
+    
+    else{
+        Lista* novo = (Lista*) malloc(sizeof(Lista));
+        novo->info = i;
+        novo->prox = *l;
+        *l = novo;
+
+    }    
+
+}
+  
 
 No *aloca_arv(char *palavra, int id_linha){
 
@@ -159,7 +185,10 @@ int main(){
 	char nome[10] = "certo";
 	buscarArvBB(raiz, nome, 0);	
 
-  printf("altura %d\n",teset_altura(raiz));
+    printf("altura %d\n",teset_altura(raiz));
+
+    printf("%d\n",busca_lista(raiz->linha, 2) );
+
 
 	return 0;
 }

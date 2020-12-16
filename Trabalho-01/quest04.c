@@ -14,12 +14,38 @@ typedef struct arvAVL{
 	struct arvAVL *esq, *dir;
 }No;
 
+int busca_lista(Lista *l, int x){
+
+    int achou = 0;
+
+    if(l != NULL){
+
+        if(l->info == x)
+            achou = 1;
+
+        else  
+           achou = busca_lista(l->prox, x);
+
+    }
+
+    return achou;
+}
+
 void insere_lst(Lista **l, int i){
-	Lista* novo = (Lista*) malloc(sizeof(Lista));
-	novo->info = i;
-	novo->prox = *l;
-	
-	*l = novo;
+    
+    int insere = busca_lista(*l, i); 
+    
+    if(insere)
+        return;
+    
+    else{
+        Lista* novo = (Lista*) malloc(sizeof(Lista));
+        novo->info = i;
+        novo->prox = *l;
+        *l = novo;
+
+    }    
+
 }
 
 int altura (No *raiz){
