@@ -140,17 +140,18 @@ void add_arquivo_arv(No **raiz){
 
 }
 
-int buscarArv(No *raiz, char *elem){ 
+int buscarArv(No *raiz, char *elem, int *achou){ 
     int passo = 0;
 
     if(raiz != NULL){
         if(strcmp(elem, raiz->palavra) < 0){
-            passo = 1 + buscarArv(raiz->esq, elem);
+            passo = 1 + buscarArv(raiz->esq, elem, achou);
         }else if(strcmp(elem, raiz->palavra) > 0){
-            passo = 1 + buscarArv(raiz->dir, elem);
+            passo = 1 + buscarArv(raiz->dir, elem, achou);
         }else{
-            // printf("Palavra encontrada na linha: ");
-            // imprime_lst(raiz->linha);
+            printf("Palavra encontrada na linha: ");
+            *achou = 1;
+            imprime_lst(raiz->linha);
          
         }
    }
@@ -163,6 +164,7 @@ void busca_arq(No *raiz){
     FILE *arq;
     char palavra[50];
     char *result;
+    int i = 0;
 
     arq = fopen("texto_busca.txt", "rt");
     if (arq == NULL){
@@ -174,7 +176,7 @@ void busca_arq(No *raiz){
         result = fgets(palavra, 50, arq); 
         if (result){
             palavra[strcspn(palavra, "\n")] = 0;
-            printf("%d\n",buscarArv(raiz, palavra));
+            printf("%d\n",buscarArv(raiz, palavra, &i));
         }
         
     }
@@ -186,11 +188,45 @@ int main(){
 	No *raiz;
 	raiz = NULL;
 
-	add_arquivo_arv(&raiz);
-	// imprime_arv(raiz);
+    int op;
 
-    busca_arq(raiz);
-    
+    add_arquivo_arv(&raiz);
+
+    char palavra[50];
+
+    do{
+
+        printf("1 - Bucar palavra\n");
+        printf("2 - Imprimir\n");
+        printf("3 - Sair\n-> ");
+        scanf("%d",&op);
+
+        switch(op){
+            case 1:
+                printf("Informe a palavra: ");
+                scanf("%s", palavra);
+                int passo, achou = 0;
+                passo = buscarArv(raiz, palavra, &achou);
+
+                if(achou)
+                    printf("\nNumero de passos: %d\n", passo);
+
+                else
+                    printf("Palavra nao encontrada\n");
+                break;
+            case 2:
+                imprime_arv(raiz);
+                break;
+            case 3:
+                break;
+            default:
+                printf("Opacao invalida\n");
+                break;
+
+        }
+
+    }while(op != 3);
+
 
 	return 0;
 }
