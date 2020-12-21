@@ -162,22 +162,30 @@ int buscarArv(No *raiz, int elem, int i){
 void bucar_elementos(No *raiz, int qtd_buscas){
 
     int achou;
+    clock_t ti, tf; // tempo inicia e  final
     
     if(raiz != NULL){
         while(qtd_buscas != 0){
 
             int valor = rand()%100;
             printf("Caminho percorrido para encontrar %d\n",valor);
-            achou = buscarArv(raiz, valor , 0);
-
+            
+            ti = clock();
+            achou = buscarArv(raiz,valor, 0);
+            tf = clock();
+            
             if(achou)
                 printf("Elemento encontrado\n");
             else
                 printf("Elemento nao existe\n");
 
+
+            printf("\nTempo de execusão em nanosegundos: %ld\n", (tf-ti)*1000000);
+
             qtd_buscas--;
         }
     }
+
 }
 
 // cria uma arvore com base na altura
@@ -194,76 +202,16 @@ void criar_arvore(No **raiz, int alt){
         criar_arvore(&(*raiz), alt);
 }
 
-int teset_altura(No *raiz){
-
-	if(raiz == NULL)
-		return -1;
-
-	int he = teset_altura(raiz->esq);
-	int hd = teset_altura(raiz->dir);
-
-	if(he > hd)
-		return he + 1;
-	else
-		return hd + 1;
-}
-
-int qtd_nos(No *raiz){
-	
-	int lado_esq = 0, lado_dir = 0; 
-	
-	if(raiz != NULL){
-			
-		lado_esq = qtd_nos(raiz->esq);
-		lado_dir = qtd_nos(raiz->dir);
-
-		return lado_esq + lado_dir + 1;
-	}
-}
-
-
 int main(){
-	No *raiz, *p;
-	raiz = NULL;
+    No *raiz;
+
+    raiz = NULL;
 
     srand((unsigned) time(NULL));
 
-    clock_t ti, tf; // tempo inicia e  final
+    // primeira tesete
+    criar_arvore(&raiz, 15);
+
+    bucar_elementos(raiz, 10);
     
-
-    // primeira teste
-    criar_arvore(&raiz, 10);
-
-   
-    ti = clock();
-    bucar_elementos(raiz, 2);
-    tf = clock();
-
-    // printf("\nTempo de execusão em nanosegundos: %ld\n", (tf-ti)*1000000);
-
-	// p = aloca_arv(400);
-	// insereAVL(&raiz, p);
-
-	// p = aloca_arv(200);
-	// insereAVL(&raiz, p);
-
-	// p = aloca_arv(100);
-	// insereAVL(&raiz, p);
-
-	// p = aloca_arv(600);
-	// insereAVL(&raiz, p);
-
-
-	// p = aloca_arv(300);
-	// insereAVL(&raiz, p);
-
-	// p = aloca_arv(250);
-	// insereAVL(&raiz, p);
-
-	// p = aloca_arv(120);
-	// insereAVL(&raiz, p);
-		
-				
-
-	return 0;
 }

@@ -35,7 +35,6 @@ int altura(No *raiz){
 
 }
 
-
 int maior(int x, int y){
     int m;
 
@@ -97,18 +96,25 @@ int buscarArvBB(No *raiz, int elem, int i){
 void bucar_elementos(No *raiz, int qtd_buscas){
 
     int achou;
+    clock_t ti, tf; // tempo inicia e  final
     
     if(raiz != NULL){
         while(qtd_buscas != 0){
 
             int valor = rand()%100;
             printf("Caminho percorrido para encontrar %d\n",valor);
+            
+            ti = clock();
             achou = buscarArvBB(raiz,valor, 0);
-
+            tf = clock();
+            
             if(achou)
                 printf("Elemento encontrado\n");
             else
                 printf("Elemento nao existe\n");
+
+
+            printf("\nTempo de execusão em nanosegundos: %ld\n", (tf-ti)*1000000);
 
             qtd_buscas--;
         }
@@ -140,15 +146,9 @@ int main(){
 
     srand((unsigned) time(NULL));
 
-    clock_t ti, tf; // tempo inicia e  final
-    
-
     // primeira tesete
-    criar_arvore(&raiz, 50);
+    criar_arvore(&raiz, 15);
 
-    ti = clock();
-    bucar_elementos(raiz, 2);
-    tf = clock();
-
-    printf("\nTempo de execusão em nanosegundos: %ld\n", (tf-ti)*1000000);
+    bucar_elementos(raiz, 10);
+    
 }

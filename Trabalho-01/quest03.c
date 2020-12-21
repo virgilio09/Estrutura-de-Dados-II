@@ -100,28 +100,6 @@ void imprime_arv(No *raiz){
 	}
 }
 
-int buscarArvBB(No *raiz, char *elem, int i){ 
-    int encontrei = 0;
-
-    if(raiz != NULL){
-        if(strcmp(elem, raiz->palavra) < 0){
-            // printf("Passo %d: %s\n",i, raiz->palavra);
-	        encontrei = buscarArvBB(raiz->esq, elem, i+1);
-        }else if(strcmp(elem, raiz->palavra) > 0){
-            // printf("Passo %d: %s\n",i, raiz->palavra);
-		    encontrei = buscarArvBB(raiz->dir, elem, i+1);
-        }else{
-            encontrei = 1;
-            printf("Palavra encontrada na linha: ");
-            imprime_lst(raiz->linha);
-            printf("\nNumero de passos: %d\n", i);
-         
-        }
-   }
-	
-    return(encontrei);	
-}
-
 
 // quebra a linha em palvras e adicionas na avores 
 void add_str(No **raiz, char *linha, int id_linha){
@@ -162,18 +140,46 @@ void add_arquivo_arv(No **raiz){
 
 }
 
-int teset_altura(No *raiz){
+int buscarArv(No *raiz, char *elem){ 
+    int passo = 0;
 
-  if(raiz == NULL)
-    return -1;
+    if(raiz != NULL){
+        if(strcmp(elem, raiz->palavra) < 0){
+            passo = 1 + buscarArv(raiz->esq, elem);
+        }else if(strcmp(elem, raiz->palavra) > 0){
+            passo = 1 + buscarArv(raiz->dir, elem);
+        }else{
+            // printf("Palavra encontrada na linha: ");
+            // imprime_lst(raiz->linha);
+         
+        }
+   }
+    
+    return passo;  
+}
 
-  int he = teset_altura(raiz->esq);
-  int hd = teset_altura(raiz->dir);
+void busca_arq(No *raiz){
 
-  if(he > hd)
-    return he + 1;
-  else
-    return hd + 1;
+    FILE *arq;
+    char palavra[50];
+    char *result;
+
+    arq = fopen("texto_busca.txt", "rt");
+    if (arq == NULL){
+        printf("Problemas na abertura do arquivo\n");
+        return;
+    }
+    
+    while (!feof(arq)){
+        result = fgets(palavra, 50, arq); 
+        if (result){
+            palavra[strcspn(palavra, "\n")] = 0;
+            printf("%d\n",buscarArv(raiz, palavra));
+        }
+        
+    }
+    fclose(arq);
+
 }
 
 int main(){
@@ -181,14 +187,10 @@ int main(){
 	raiz = NULL;
 
 	add_arquivo_arv(&raiz);
-	imprime_arv(raiz);
-	char nome[10] = "certo";
-	buscarArvBB(raiz, nome, 0);	
+	// imprime_arv(raiz);
 
-    printf("altura %d\n",teset_altura(raiz));
-
-    printf("%d\n",busca_lista(raiz->linha, 2) );
-
+    busca_arq(raiz);
+    
 
 	return 0;
 }
