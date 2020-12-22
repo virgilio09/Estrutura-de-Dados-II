@@ -202,6 +202,26 @@ void criar_arvore(No **raiz, int alt){
         criar_arvore(&(*raiz), alt);
 }
 
+// cria arvore com base na quantidade de elementos
+void criar_arvoreElem(No **raiz, int qtd){
+
+    No *a;
+    int num;
+    clock_t ti, tf;
+
+    for(int i = 0; i < qtd; i++){
+        num = 1 + rand() % 100;
+        a = aloca_arv(num);
+        ti = clock();
+        insereAVL(&(*raiz), a);
+        tf = clock();
+
+        printf("%ld\n", (tf-ti)*1000000);
+
+    }
+
+}
+
 int main(){
     No *raiz;
 
@@ -210,8 +230,10 @@ int main(){
     srand((unsigned) time(NULL));
 
     // primeira tesete
-    criar_arvore(&raiz, 15);
+    // criar_arvore(&raiz, 15);
 
-    bucar_elementos(raiz, 10);
+    // bucar_elementos(raiz, 10);
+
+    criar_arvoreElem(&raiz, 300);
     
 }
