@@ -1,0 +1,8 @@
+%Unidade 1
+red: vermelho
+boy: garoto, menino
+house: casa
+%Unidade 2
+apple: maca
+home: casa, lar
+computer: computador, pc
