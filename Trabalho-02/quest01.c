@@ -21,6 +21,43 @@ typedef struct unidades{
 
 }Unidades;
 
+void insere_lst_ing(Lista_ing **l, char *str_ing);
+
+void insere_unidade(Unidades **l, No *raiz, int uni);
+
+No *aloca_arv(char *str_port, char *str_ing );
+
+void insere_arv(No **raiz, No *a);
+
+void add_str(char *linha, No **raiz);
+
+No* arv_libera(No *a);
+
+void add_arq_arv(No **raiz, Unidades **lst_uni);
+
+void imprime_lst(Lista_ing* l);
+
+void imprime_arv(No *raiz);
+
+void imprime_unidades(Unidades* l);
+
+
+int main(){
+
+    No *raiz;
+    Unidades *list_unidades;
+    raiz = NULL;
+    list_unidades = NULL;
+
+    add_arq_arv(&raiz, &list_unidades);
+
+
+    // imprime_unidades(list_unidades);
+    printf("\n");
+
+    return 0;
+}
+
 void insere_lst_ing(Lista_ing **l, char *str_ing){
   
     Lista_ing *nova = (Lista_ing*)malloc(sizeof(Lista_ing));
@@ -60,14 +97,14 @@ void insere_arv(No **raiz, No *a){
         *raiz = a;
 
     else{
-    	if(strcmp(a->infoPort, (*raiz)->infoPort) < 0)
+        if(strcmp(a->infoPort, (*raiz)->infoPort) < 0)
             insere_arv(&(*raiz)->esq, a);
 
         else if(strcmp(a->infoPort, (*raiz)->infoPort) > 0)
             insere_arv(&(*raiz)->dir, a);
 
         else
-        	insere_lst_ing(&(*raiz)->lista_ing, a->lista_ing->info);
+            insere_lst_ing(&(*raiz)->lista_ing, a->lista_ing->info);
     }        
 }
 
@@ -82,14 +119,14 @@ void add_str(char *linha, No **raiz){
     linha[strcspn(linha, "\n")] = 0; //remove o "/n" do final da linha
     strncpy(copy_linha, linha, strlen(linha));  
 
-	str_ing = strtok(copy_linha, ":");
+    str_ing = strtok(copy_linha, ":");
     str_pt = strtok(linha, " :,");
 
     while(str_pt != NULL){
 
         if(cont != 0){
             a = aloca_arv(str_pt, str_ing);
-	    	insere_arv(&(*raiz), a);
+            insere_arv(&(*raiz), a);
 
         }
 
@@ -98,91 +135,78 @@ void add_str(char *linha, No **raiz){
     }
 }
 
+No* arv_libera(No *a){
+    
+    if(a != NULL){
+        arv_libera(a->esq); 
+        arv_libera(a->dir); 
+        free(a);
+    }
+
+    return NULL;
+}
+
 // ler arquivo e add na arvore
 void add_arq_arv(No **raiz, Unidades **lst_uni){
 
     FILE *arq;
-  	char linha[100];
-  	char *result;
-    int unidade = 0;
+    char linha[100];
+    char *result;
+    int unidade = 1;
 
-  	arq = fopen("vocabulario.txt", "rt");
-  	if (arq == NULL){
-    	printf("Problemas na abertura do arquivo\n");
-     	return;
-  	}
-  	
-  	while (!feof(arq)){
-      	result = fgets(linha, 250, arq); 
-      	if (result){
+    arq = fopen("vocabulario.txt", "rt");
+    if (arq == NULL){
+        printf("Problemas na abertura do arquivo\n");
+        return;
+    }
+    
+    while(!feof(arq)){
+        result = fgets(linha, 250, arq); 
+        if (result){
+          
+            if(linha[0] == '%')
+               add_str(linha, &(*raiz));
             
-            if(linha[0] != '%')
-                add_str(linha, &(*raiz));  
-            
-            else{
-                if(unidade != 0)
-                    insere_unidade(&(*lst_uni), *raiz, unidade);
+        }
 
-                *raiz = NULL;
-                unidade++;
-            }
-            
-               
 
-      	}
-  	}
-  	fclose(arq);
+    }
+
+    imprime_arv(*raiz);
+    *raiz = arv_libera(*raiz);
+    imprime_arv(*raiz);
+
+    fclose(arq);
 
 }
 
 
 void imprime_lst(Lista_ing* l){
-	
-	Lista_ing* p;
-	p = l;
-	if(p != NULL){
-		printf("%s, ", p->info);
-		imprime_lst(p->prox);
-	}
+    
+    Lista_ing* p;
+    p = l;
+    if(p != NULL){
+        printf("%s, ", p->info);
+        imprime_lst(p->prox);
+    }
 }
-
 // em ordem 
 void imprime_arv(No *raiz){
-	if(raiz != NULL){
-		imprime_arv(raiz->esq);
+    if(raiz != NULL){
+        imprime_arv(raiz->esq);
         printf("\n%s: ",raiz->infoPort);
         imprime_lst(raiz->lista_ing);
-		imprime_arv(raiz->dir);
-	}
+        imprime_arv(raiz->dir);
+    }
 }
 
 void imprime_unidades(Unidades* l){
-	
-	Unidades* p;
-	p = l;
-	if(p != NULL){
+    
+    Unidades* p;
+    p = l;
+    if(p != NULL){
         printf("Unidade %d", p->unidade);
         imprime_arv(p->info);
-		imprime_unidades(p->prox);
-	}
-}
-
-
-
-int main(){
-
-    No *raiz;
-    Unidades *list_unidades;
-    raiz = NULL;
-    list_unidades = NULL;
-
-    add_arq_arv(&raiz, &list_unidades);
-
-    imprime_arv(raiz);
-
-    printf("\n");
-
-    imprime_unidades(list_unidades);
-
-    return 0;
+        imprime_unidades(p->prox);
+    }
 }
