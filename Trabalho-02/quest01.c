@@ -105,6 +105,7 @@ void add_arq_arv(No **raiz){
 
 }
 
+
 void imprime_lst(Lista_ing* l){
 	
 	Lista_ing* p;
@@ -128,24 +129,14 @@ void imprime_arv(No *raiz){
 
 int main(){
 
-    // ler_arq();
     No *raiz;
     raiz = NULL;
-
-    // char teste[20] = "boy: garoto, menino\n";
-
-    // char teste1[20]  = "house: casa\n";
-    // char teste2[20]  = "home: casa, lar\n";
-
-
-    // add_str(teste, &raiz);
-    // add_str(teste1, &raiz);
-    // add_str(teste2, &raiz);
 
     add_arq_arv(&raiz);
     
     imprime_arv(raiz);
 
+    printf("\n");
 
     return 0;
 }
