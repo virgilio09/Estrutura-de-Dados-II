@@ -7,19 +7,37 @@ typedef struct lista_ing{
 	struct lista_ing *prox;
 }Lista_ing;
 
-typedef struct arv_Vocabulario{
+
+typedef struct arv_dircionario{
     char infoPort[50];
     Lista_ing *lista_ing;
-    struct arv_Vocabulario *esq, *dir;
+    struct arv_dircionario *esq, *dir;
 }No;
 
-void insere_lst(Lista_ing **l, char *str_ing){
+typedef struct unidades{
+    int unidade;
+    No *info;
+    struct unidades *prox;
+
+}Unidades;
+
+void insere_lst_ing(Lista_ing **l, char *str_ing){
   
     Lista_ing *nova = (Lista_ing*)malloc(sizeof(Lista_ing));
     strncpy(nova->info, str_ing, strlen(str_ing));    
     nova->prox = *l;
     *l = nova;
   
+}
+
+void insere_unidade(Unidades **l, No *raiz, int uni){
+
+    Unidades *nova = (Unidades*)malloc(sizeof(Unidades));
+    nova->info = raiz;
+    nova->unidade = uni;
+    nova->prox = *l;
+    *l = nova;
+
 }
 
 No *aloca_arv(char *str_port, char *str_ing ){
@@ -29,7 +47,7 @@ No *aloca_arv(char *str_port, char *str_ing ){
     nova = (No*)malloc(sizeof(No));
 
     strncpy(nova->infoPort, str_port, strlen(str_port));    
-    insere_lst(&nova->lista_ing, str_ing);
+    insere_lst_ing(&nova->lista_ing, str_ing);
     nova->esq = NULL;
     nova->dir = NULL;
 
@@ -49,7 +67,7 @@ void insere_arv(No **raiz, No *a){
             insere_arv(&(*raiz)->dir, a);
 
         else
-        	insere_lst(&(*raiz)->lista_ing, a->lista_ing->info);
+        	insere_lst_ing(&(*raiz)->lista_ing, a->lista_ing->info);
     }        
 }
 
@@ -81,11 +99,12 @@ void add_str(char *linha, No **raiz){
 }
 
 // ler arquivo e add na arvore
-void add_arq_arv(No **raiz){
+void add_arq_arv(No **raiz, Unidades **lst_uni){
 
     FILE *arq;
   	char linha[100];
   	char *result;
+    int unidade = 0;
 
   	arq = fopen("vocabulario.txt", "rt");
   	if (arq == NULL){
@@ -96,8 +115,19 @@ void add_arq_arv(No **raiz){
   	while (!feof(arq)){
       	result = fgets(linha, 250, arq); 
       	if (result){
+            
             if(linha[0] != '%')
-                add_str(linha, &(*raiz));            
+                add_str(linha, &(*raiz));  
+            
+            else{
+                if(unidade != 0)
+                    insere_unidade(&(*lst_uni), *raiz, unidade);
+
+                *raiz = NULL;
+                unidade++;
+            }
+            
+               
 
       	}
   	}
@@ -126,17 +156,33 @@ void imprime_arv(No *raiz){
 	}
 }
 
+void imprime_unidades(Unidades* l){
+	
+	Unidades* p;
+	p = l;
+	if(p != NULL){
+        printf("Unidade %d", p->unidade);
+        imprime_arv(p->info);
+		imprime_unidades(p->prox);
+	}
+}
+
+
 
 int main(){
 
     No *raiz;
+    Unidades *list_unidades;
     raiz = NULL;
+    list_unidades = NULL;
 
-    add_arq_arv(&raiz);
-    
+    add_arq_arv(&raiz, &list_unidades);
+
     imprime_arv(raiz);
 
     printf("\n");
+
+    imprime_unidades(list_unidades);
 
     return 0;
 }
