@@ -378,8 +378,8 @@ int excluirAVL(No **raiz, char *palavra){
 
             }
 
+            free(aux);
 
-			// remover
 		}
 
     }
