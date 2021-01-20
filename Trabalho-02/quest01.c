@@ -14,16 +14,8 @@ typedef struct arv_dircionario{
     struct arv_dircionario *esq, *dir;
 }No;
 
-typedef struct unidades{
-    int unidade;
-    No *info;
-    struct unidades *prox;
-
-}Unidades;
 
 void insere_lst_ing(Lista_ing **l, char *str_ing);
-
-void insere_unidade(Unidades **l, No *raiz, int uni);
 
 No *aloca_arv(char *str_port, char *str_ing );
 
@@ -31,29 +23,35 @@ void insere_arv(No **raiz, No *a);
 
 void add_str(char *linha, No **raiz);
 
-No* arv_libera(No *a);
-
-void add_arq_arv(No **raiz, Unidades **lst_uni);
+void add_arq_arv(No **raiz);
 
 void imprime_lst(Lista_ing* l);
 
 void imprime_arv(No *raiz);
 
-void imprime_unidades(Unidades* l);
+int qtd_filhos(No *raiz);
+
+No *menorfilho(No **raiz);
+
+int excluirArvoreBB(No **raiz, char *palavra);
 
 
 int main(){
 
     No *raiz;
-    Unidades *list_unidades;
     raiz = NULL;
-    list_unidades = NULL;
 
-    add_arq_arv(&raiz, &list_unidades);
+    add_arq_arv(&raiz);
 
-
-    // imprime_unidades(list_unidades);
+    imprime_arv(raiz);
     printf("\n");
+
+    excluirArvoreBB(&raiz, "vermelho");
+
+    imprime_arv(raiz);
+    printf("\n");
+
+
 
     return 0;
 }
@@ -67,15 +65,6 @@ void insere_lst_ing(Lista_ing **l, char *str_ing){
   
 }
 
-void insere_unidade(Unidades **l, No *raiz, int uni){
-
-    Unidades *nova = (Unidades*)malloc(sizeof(Unidades));
-    nova->info = raiz;
-    nova->unidade = uni;
-    nova->prox = *l;
-    *l = nova;
-
-}
 
 No *aloca_arv(char *str_port, char *str_ing ){
 
@@ -135,19 +124,8 @@ void add_str(char *linha, No **raiz){
     }
 }
 
-No* arv_libera(No *a){
-    
-    if(a != NULL){
-        arv_libera(a->esq); 
-        arv_libera(a->dir); 
-        free(a);
-    }
-
-    return NULL;
-}
-
 // ler arquivo e add na arvore
-void add_arq_arv(No **raiz, Unidades **lst_uni){
+void add_arq_arv(No **raiz){
 
     FILE *arq;
     char linha[100];
@@ -164,7 +142,7 @@ void add_arq_arv(No **raiz, Unidades **lst_uni){
         result = fgets(linha, 250, arq); 
         if (result){
           
-            if(linha[0] == '%')
+            if(linha[0] != '%')
                add_str(linha, &(*raiz));
             
         }
@@ -172,9 +150,6 @@ void add_arq_arv(No **raiz, Unidades **lst_uni){
 
     }
 
-    imprime_arv(*raiz);
-    *raiz = arv_libera(*raiz);
-    imprime_arv(*raiz);
 
     fclose(arq);
 
@@ -190,6 +165,7 @@ void imprime_lst(Lista_ing* l){
         imprime_lst(p->prox);
     }
 }
+
 // em ordem 
 void imprime_arv(No *raiz){
     if(raiz != NULL){
@@ -200,13 +176,67 @@ void imprime_arv(No *raiz){
     }
 }
 
-void imprime_unidades(Unidades* l){
+int qtd_filhos(No*raiz){
+
+    int filho = 0; //é folha
+
+    if (raiz->esq != NULL && raiz->dir != NULL) 
+        filho = 1; // dois filhos
+    if (raiz->esq != NULL)
+        filho = 2; //filho direita
+    else 
+        filho = 3; //filho da esq
+
+
+    return filho;
+}
+
+No *menorfilho(No **raiz) {
+    No *menor;
+
+    if((**raiz).esq != NULL)
+        menor = menorfilho(&(**raiz).esq);
+    else 
+        menor = *raiz;
     
-    Unidades* p;
-    p = l;
-    if(p != NULL){
-        printf("Unidade %d", p->unidade);
-        imprime_arv(p->info);
-        imprime_unidades(p->prox);
+    return menor;
+}
+
+int excluirArvoreBB(No **raiz, char *palavra) { 
+
+    int removeu = 0;
+
+    if(*raiz != NULL) {
+        if(strcmp(palavra, (**raiz).infoPort) < 0)
+            removeu = excluirArvoreBB(&(**raiz).esq, palavra);
+
+        else if(strcmp(palavra, (**raiz).infoPort) > 0)
+           removeu = excluirArvoreBB(&(**raiz).dir, palavra);
+        
+        else{
+            removeu = 1;
+            No *aux;
+            aux = *raiz;
+
+            if (qtd_filhos(*raiz) == 0)
+                *raiz = NULL;
+
+            else if (qtd_filhos(*raiz) == 2) 
+                *raiz = (**raiz).esq;
+
+            else if (qtd_filhos(*raiz) == 3) 
+                *raiz = (**raiz).dir;
+
+            else if (qtd_filhos(*raiz) == 1) {
+                No *menor;
+                menor = menorfilho(&(**raiz).dir);
+                menor->esq = (**raiz).esq;
+                *raiz = (**raiz).dir;
+            }
+
+            free(aux);
+        }
     }
+
+    return removeu; 
 }
