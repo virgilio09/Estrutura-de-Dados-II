@@ -206,7 +206,7 @@ int excluirArvoreBB(No **raiz, char *palavra) {
 
     int removeu = 0;
 
-    if(*raiz != NULL) {
+    if(*raiz != NULL){
         if(strcmp(palavra, (**raiz).infoPort) < 0)
             removeu = excluirArvoreBB(&(**raiz).esq, palavra);
 
@@ -218,16 +218,16 @@ int excluirArvoreBB(No **raiz, char *palavra) {
             No *aux;
             aux = *raiz;
 
-            if (qtd_filhos(*raiz) == 0)
+            if(qtd_filhos(*raiz) == 0)
                 *raiz = NULL;
 
-            else if (qtd_filhos(*raiz) == 2) 
+            else if(qtd_filhos(*raiz) == 2) 
                 *raiz = (**raiz).esq;
 
-            else if (qtd_filhos(*raiz) == 3) 
+            else if(qtd_filhos(*raiz) == 3) 
                 *raiz = (**raiz).dir;
 
-            else if (qtd_filhos(*raiz) == 1) {
+            else if(qtd_filhos(*raiz) == 1){
                 No *menor;
                 menor = menorfilho(&(**raiz).dir);
                 menor->esq = (**raiz).esq;

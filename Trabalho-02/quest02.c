@@ -43,12 +43,24 @@ void imprime_lst(Lista_ing* l);
 
 void imprime_arv(No *raiz);
 
+int qtd_filhos(No *raiz);
+
+No *menorfilho(No **raiz);
+
+int excluirAVL(No **raiz, char *palavra);
+
 
 int main(){
 	No *raiz;
     raiz = NULL;
 
     add_arq_arv(&raiz);
+
+    imprime_arv(raiz);
+
+    printf("\n");
+
+    excluirAVL(&raiz, "vermelho");
 
     imprime_arv(raiz);
 
@@ -268,5 +280,107 @@ void imprime_arv(No *raiz){
         printf("\n%s: ",raiz->infoPort);
         imprime_lst(raiz->lista_ing);
         imprime_arv(raiz->dir);
+    }
+}
+
+int qtd_filhos(No*raiz){
+
+    int filho = 0; //é folha
+
+    if (raiz->esq != NULL && raiz->dir != NULL) 
+        filho = 1; // dois filhos
+    if (raiz->esq != NULL)
+        filho = 2; //filho direita
+    else 
+        filho = 3; //filho da esq
+
+
+    return filho;
+}
+
+No *menorfilho(No **raiz) {
+    No *menor;
+
+    if((**raiz).esq != NULL)
+        menor = menorfilho(&(**raiz).esq);
+    else 
+        menor = *raiz;
+    
+    return menor;
+}
+
+
+int excluirAVL(No **raiz, char *palavra){
+
+	int removeu = 0;
+
+    if(*raiz != NULL){
+
+		if(strcmp(palavra, (**raiz).infoPort) < 0){
+			int fb;
+			removeu = excluirAVL(&(*raiz)->esq, palavra);
+			if(removeu){
+				fb = fator_balanceamento(*raiz);
+				if(fb >= 2){
+					
+					if(strcmp(palavra, (**raiz).infoPort) < 0)
+						rotacaoDir(raiz);
+					else
+						rotacaoEsqDir(raiz);
+				}
+			}
+		}
+		else if(strcmp(palavra, (**raiz).infoPort) > 0){
+				int fb;
+				removeu = excluirAVL(&(*raiz)->dir, palavra);
+
+				if(removeu){
+					fb = fator_balanceamento(*raiz);
+
+					if(fb <= -2){
+						if(strcmp(palavra, (**raiz).infoPort) > 0)
+							rotacaoEsq(raiz);
+						else
+							rotacaoDirEsq(raiz);
+					}
+				}
+			}
+
+		else{
+
+			No *aux;
+            aux = *raiz;
+
+            if(qtd_filhos(*raiz) == 0)
+                *raiz = NULL;
+
+            else if(qtd_filhos(*raiz) == 2) 
+                *raiz = (**raiz).esq;
+
+            else if(qtd_filhos(*raiz) == 3) 
+                *raiz = (**raiz).dir;
+
+            else if(qtd_filhos(*raiz) == 1){
+            	No *menor;
+                menor = menorfilho(&(**raiz).dir);
+                menor->esq = (**raiz).esq;
+                *raiz = (**raiz).dir;
+                int fb;
+                fb = fator_balanceamento(*raiz);
+				if(fb >= 2){
+					
+					if(strcmp(palavra, (**raiz).infoPort) < 0)
+						rotacaoDir(raiz);
+					else
+						rotacaoEsqDir(raiz);
+				}
+
+
+            }
+
+
+			// remover
+		}
+
     }
 }
