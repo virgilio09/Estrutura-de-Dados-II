@@ -254,14 +254,10 @@ void add_arq_arv(No **raiz){
             
         }
 
-
     }
-
-
     fclose(arq);
 
 }
-
 
 void imprime_lst(Lista_ing* l){
     
