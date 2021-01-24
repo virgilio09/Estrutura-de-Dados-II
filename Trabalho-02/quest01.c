@@ -72,7 +72,7 @@ No *aloca_arv(char *str_port, char *str_ing ){
 
     nova = (No*)malloc(sizeof(No));
 
-    strncpy(nova->infoPort, str_port, strlen(str_port));    
+    strcpy(nova->infoPort, str_port);    
     insere_lst_ing(&nova->lista_ing, str_ing);
     nova->esq = NULL;
     nova->dir = NULL;
@@ -139,7 +139,7 @@ void add_arq_arv(No **raiz){
     }
     
     while(!feof(arq)){
-        result = fgets(linha, 250, arq); 
+        result = fgets(linha, 100, arq); 
         if (result){
           
             if(linha[0] != '%')
