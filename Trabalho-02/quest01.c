@@ -35,6 +35,7 @@ No *menorfilho(No **raiz);
 
 int excluirArvoreBB(No **raiz, char *palavra);
 
+int busca(No *raiz, char *palvra);
 
 int main(){
 
@@ -46,7 +47,11 @@ int main(){
     imprime_arv(raiz);
     printf("\n");
 
+    printf("Ok = %d",busca(raiz, "casa"));
+
     excluirArvoreBB(&raiz, "vermelho");
+
+  
 
     imprime_arv(raiz);
     printf("\n");
@@ -169,6 +174,7 @@ void imprime_lst(Lista_ing* l){
 // em ordem 
 void imprime_arv(No *raiz){
     if(raiz != NULL){
+         
         imprime_arv(raiz->esq);
         printf("\n%s: ",raiz->infoPort);
         imprime_lst(raiz->lista_ing);
@@ -239,4 +245,24 @@ int excluirArvoreBB(No **raiz, char *palavra) {
     }
 
     return removeu; 
+}
+
+
+int busca(No *raiz, char *palavra){
+
+    int encontrou = 0;
+
+     if(raiz != NULL){
+
+        if(strcmp(palavra, raiz->infoPort) < 0)
+           encontrou = busca(raiz->esq, palavra);
+
+        else if(strcmp(palavra, raiz->infoPort) > 0)
+            encontrou = busca(raiz->dir, palavra);
+
+        else
+            encontrou = 1; 
+    }    
+
+    return encontrou;    
 }

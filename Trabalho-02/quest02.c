@@ -49,6 +49,8 @@ No *menorfilho(No **raiz);
 
 int excluirAVL(No **raiz, char *palavra);
 
+int busca(No *raiz, char *palvra);
+
 
 int main(){
 	No *raiz;
@@ -61,6 +63,8 @@ int main(){
     printf("\n");
 
     excluirAVL(&raiz, "vermelho");
+
+	printf("Ok = %d",busca(raiz, "casa"));
 
     imprime_arv(raiz);
 
@@ -379,4 +383,24 @@ int excluirAVL(No **raiz, char *palavra){
 		}
 
     }
+}
+
+
+int busca(No *raiz, char *palavra){
+
+    int encontrou = 0;
+
+     if(raiz != NULL){
+
+        if(strcmp(palavra, raiz->infoPort) < 0)
+           encontrou = busca(raiz->esq, palavra);
+
+        else if(strcmp(palavra, raiz->infoPort) > 0)
+            encontrou = busca(raiz->dir, palavra);
+
+        else
+            encontrou = 1; 
+    }    
+
+    return encontrou;    
 }
