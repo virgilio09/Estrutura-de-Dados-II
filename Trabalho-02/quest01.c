@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 typedef struct lista_ing{
 	char info[50];
@@ -42,21 +43,50 @@ int main(){
     No *raiz;
     raiz = NULL;
 
+    char palavra[30];
+
     add_arq_arv(&raiz);
 
-    imprime_arv(raiz);
-    printf("\n");
+    int op;
 
-    printf("Ok = %d",busca(raiz, "casa"));
+    do{
+       printf("\n1 - Buscar\n");
+       printf("2 - Imprimir\n");
+       printf("3 - Excluir\n");
+       printf("4 - Sair\n-> ");
+       scanf("%d",&op);
 
-    excluirArvoreBB(&raiz, "vermelho");
+       switch (op){
+            case 1:
+                printf("Informe uma palavra: ");
+                scanf("%s",palavra);
 
-  
+                if(busca(raiz, palavra)){}
+    
+                else
+                    printf("Palavara nao encontrada!\n");
+                break;
+            case 2:
+                imprime_arv(raiz);
+                break;
+            case 3:
+                printf("Informe uma palavra: ");
+                scanf("%s",palavra);
 
-    imprime_arv(raiz);
-    printf("\n");
+                if(excluirArvoreBB(&raiz, palavra))
+                    printf("Palavara excluida com sucesso!\n");
+                else
+                    printf("Palavara nao encontrada!\n");
 
-
+            case 4:
+                break;
+            
+            default:
+                printf("Opcao invalida\n");
+                break;
+       }
+    }while (op != 4);
+    
 
     return 0;
 }
@@ -107,6 +137,8 @@ void add_str(char *linha, No **raiz){
 
     No *a;
 
+    // clock_t ti, tf;
+
     char *str_ing, *str_pt, copy_linha[100];
     int cont = 0; // pular a palavra
     
@@ -119,8 +151,14 @@ void add_str(char *linha, No **raiz){
     while(str_pt != NULL){
 
         if(cont != 0){
+             
             a = aloca_arv(str_pt, str_ing);
+            // ti = clock();4
+
             insere_arv(&(*raiz), a);
+            // tf = clock();
+
+            // printf("%ld\n", (tf-ti)*1000000);
 
         }
 
@@ -252,7 +290,7 @@ int busca(No *raiz, char *palavra){
 
     int encontrou = 0;
 
-     if(raiz != NULL){
+    if(raiz != NULL){
 
         if(strcmp(palavra, raiz->infoPort) < 0)
            encontrou = busca(raiz->esq, palavra);
@@ -260,8 +298,11 @@ int busca(No *raiz, char *palavra){
         else if(strcmp(palavra, raiz->infoPort) > 0)
             encontrou = busca(raiz->dir, palavra);
 
-        else
-            encontrou = 1; 
+        else{
+            encontrou = 1;
+            printf("%s: ", raiz->infoPort);
+            imprime_lst(raiz->lista_ing);
+        }
     }    
 
     return encontrou;    

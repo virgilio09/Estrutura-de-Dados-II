@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 typedef struct listaIng{
 	char info[50];
@@ -44,29 +43,37 @@ void add_str(char *linha, No **raiz);
 
 void add_arq_arv(No **raiz);
 
+
+
 int main(){
     No *raiz = NULL;
-  
-    int op;
+    ChaveDic *infoMeio = = (ChaveDic*)malloc(sizeof(ChaveDic));
 
-    do{
-       printf("1 - Imprimir\n");
-       printf("2 - Sair\n-> ");
-       scanf("%d",&op);
+    // add_arq_arv(&raiz);
 
-       switch (op){
-            case 1:
-                add_arq_arv(&raiz);
-                imprimirArv23(raiz);
-                break;
-            case 2:
-                break;
-            
-            default:
-                printf("Opcao invalida\n");
-                break;
-       }
-    }while (op != 2);
+
+    insere23(NULL, &raiz, "vermelho", " red", infoMeio);
+   
+    insere23(NULL, &raiz, "garoto","boy", infoMeio);
+   
+    insere23(NULL, &raiz, "menino", "boy", infoMeio);
+ 
+    // insere23(NULL, &raiz, "casa", "house", infoMeio);
+    // insere23(NULL, &raiz, "maca", "apple",infoMeio);
+    // insere23(NULL, &raiz, "casa", "home", infoMeio);
+
+    //  insere23(NULL, &raiz, "coputador", "pc", infoMeio);
+    // insere23(NULL, &raiz, "lar", "home", infoMeio);
+
+    // imprimirArv23(raiz);
+    // mostrar(raiz);
+
+
+    printf("%s", raiz->chaveEsq->infoPort);
+    // imprimeLst(raiz->chaveDir->listaIng);
+
+    printf("\n");
+
 
     return 0;
 }
@@ -138,7 +145,7 @@ void imprimeLst(ListaIng *l){
     }
 }
 
-ListaIng *copyList(ListaIng **listaDir, ListaIng *listaEsq){
+ListaIng *copyList(ListaIng **listaDir, ListaIng *listaEsq) {
     ListaIng *aux;
     aux = listaEsq; 
     *listaDir = NULL;
@@ -236,7 +243,7 @@ No *insere23(No **pai, No **raiz, char *infoPort, char *infoIng, ChaveDic *infoM
     No *novo;
 
     if(*raiz == NULL){
-      
+        printf("ok 1\n");
         ChaveDic *info = alocaChaveDic(infoPort, infoIng); 
         *raiz = criaNO(info, NULL, NULL);
     }
@@ -255,6 +262,7 @@ No *insere23(No **pai, No **raiz, char *infoPort, char *infoIng, ChaveDic *infoM
             if(folha(*raiz)){
 
                 if((**raiz).nChaves == 1){
+                    printf("ok 2\n");
                     ChaveDic *info = alocaChaveDic(infoPort, infoIng); 
                     *raiz = adicionaNo(*raiz, info, NULL);
                     novo = NULL;
@@ -277,7 +285,7 @@ No *insere23(No **pai, No **raiz, char *infoPort, char *infoIng, ChaveDic *infoM
                 else if(strcmp(infoPort, (*raiz)->chaveDir->infoPort) < 0 || (**raiz).nChaves == 1)
                     novo = insere23(raiz, &(**raiz).centro, infoPort, infoIng, infoMeio);
                 else 
-                novo = insere23(raiz, &(**raiz).dir, infoPort, infoIng, infoMeio);
+                    novo = insere23(raiz, &(**raiz).dir, infoPort, infoIng, infoMeio);
             
                 if(novo != NULL){
                     if((**raiz).nChaves == 1){
@@ -308,7 +316,6 @@ void add_str(char *linha, No **raiz){
 
     No *a;
     // ChaveDic *infoMeio;
-    // clock_t ti, tf;
 
     char *str_ing, *str_pt, copy_linha[100];
     int cont = 0; // pular a palavra
@@ -322,17 +329,15 @@ void add_str(char *linha, No **raiz){
     while(str_pt != NULL){
 
         if(cont != 0){
-
-            if(cont == 1){
-                ChaveDic *infoMeio = (ChaveDic*) malloc(sizeof(ChaveDic));
-                strcpy((*infoMeio).infoPort, "#");
-                (*infoMeio).listaIng = NULL;
-                // ti = clock();
-                insere23(NULL, &(*raiz), str_pt, str_ing, infoMeio);
-                // tf = clock();
-
-                // printf("%ld\n", (tf-ti)*1000000);
-            }                 
+        
+            ChaveDic *infoMeio = (ChaveDic*) malloc(sizeof(ChaveDic));
+            strcpy((*infoMeio).infoPort, "#");
+            (*infoMeio).listaIng = NULL;
+        
+            insere23(NULL, &(*raiz), str_pt, str_ing, infoMeio);
+            printf("%s %s\n", str_pt, str_ing);
+            // printf("Inserido\n");
+                
            
         }
 
